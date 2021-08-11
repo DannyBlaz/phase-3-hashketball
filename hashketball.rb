@@ -1,4 +1,5 @@
 # Write your code below game_hash
+require "pry"
 def game_hash
   {
     home: {
@@ -126,4 +127,69 @@ def game_hash
   }
 end
 
+# Helper Methods
+
+def get_team(team)
+  if game_hash[:home][:team_name] == team
+    return game_hash[:home]
+  elsif game_hash[:away][:team_name] == team
+    return game_hash[:away]
+  end
+end
+
+def get_players
+  game_hash[:home][:players] + game_hash[:away][:players]
+end
+
 # Write code here
+
+def num_points_scored(player)
+  get_players.each do |ele|
+    return ele[:points] if ele[:player_name] == player
+  end
+end
+
+def shoe_size(player)
+  game_hash.each do |k, v|
+    v[:players].each do |ele|
+      if ele[:player_name] == player
+        return ele[:shoe]
+      end
+    end
+  end
+end
+
+
+def team_colors(team)
+  hash = get_team(team)
+  return hash[:colors]
+end
+
+team_colors("Brooklyn Nets")
+
+def team_names
+  arr = []
+  game_hash.each do |k, v|
+    arr << v[:team_name]
+  end
+  arr
+end
+
+def player_numbers(team)
+  arr = []
+  if game_hash[:home][:team_name] == team
+    game_hash[:home][:players].each{ |ele| arr << ele[:number] }
+  else
+    game_hash[:away][:players].each{ |ele| arr << ele[:number] }
+  end
+  arr
+end
+
+def player_stats(player)
+  get_players.each{ |ele| return ele if ele[:player_name] == player }
+end
+
+def big_shoe_rebounds
+  big_sheos = get_players.sort_by!{|ele| ele[:shoe]}.last
+  big_sheos[:rebounds]
+end
